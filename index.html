@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Busdoor | Carflax</title>
+        <link rel="stylesheet" href="./style.css">
+        <link rel="shortcut icon" href="./assets/images/Favicon.png" type="image/x-icon">
+    
+        <!-- Open Graph Meta Tags -->
+        <meta property="og:title" content="Busdoor | Carflax">
+        <meta property="og:description" content="A Carflax oferece uma solução completa para publicidade em busdoors, conectando sua marca com milhares de pessoas diariamente. Explore nossas rotas disponíveis e descubra como sua marca pode ganhar visibilidade nas principais avenidas e ruas da cidade.">
+        <meta property="og:image" content="https://busdoor.vercel.app/assets/images/Favicon.png">
+        <meta property="og:url" content="https://busdoor.vercel.app/">
+        <meta property="og:type" content="website">
+      
+        <!-- Meta tag para Twitter -->
+        <meta name="twitter:card" content="summary_large_image">
+    
+        <!-- External Stylesheets and Scripts -->
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <script src="./script.js" defer></script>
+    </head>
+    <body>
+
+        <header class="header">
+            <a href="#" class="logo">
+                <img src="./assets/images/logo Carflax.png" alt="Carflax Logo">
+                <span class="animate" style="--i:1;"></span>
+            </a>
+
+            <div class="bx bx-menu" id="menu-icon">
+                <span class="animate" style="--i:2;"></span>
+            </div>
+
+            <nav class="navbar">
+                <a href="#inicio" class="active"><i class='bx bx-home-alt-2'></i>INÍCIO</a>
+                <a href="#planos"><i class='bx bxs-credit-card'></i>PLANOS</a>
+                <a href="#linhas"><i class='bx bx-bus'></i>LINHAS</a>
+                <a href="#suporte"><i class='bx bx-support'></i>SUPORTE</a>
+            </nav>
+        </header>
+
+        <main id="inicio">
+            <section class="buss">
+                <img src="./assets/images/Pessoas conversando.svg" alt="Pessoas conversando">
+            </section>
+            <section class="form">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <div class="social-icons">
+                        <a href="#" class="icons"><i class="bx bxl-google"></i></a>
+                        <a href="#" class="icons"><i class="bx bxl-facebook"></i></a>
+                        <a href="#" class="icons"><i class="bx bxl-github"></i></a>
+                    </div>
+                    <span>Fazer login com E-mail e Senha</span>
+                    <input required id="login" type="text" placeholder="Digite seu Usuário">
+                    <input required id="senha" type="password" placeholder="Digite sua Senha">
+                    <button type="submit">Entrar</button>
+                </form>
+                <div id="errorMessage" class="error-message" style="display: none;">
+                    Login ou senha incorretos. Tente novamente.
+                </div>
+            </section>
+        </main>
+        
+        <section id="planos" class="plans">
+            <h2>Escolha seu Plano</h2>
+            <div class="plan-options">
+                <div class="plan-card">
+                    <h3>Mensal</h3>
+                    <p class="original-price">R$ 500,00</p>
+                    <p class="discounted-price">R$ 480,00</p>
+                    <p>4% Desconto</p>
+                    <p>Vinculação por 1 mês.</p>
+                    <ul>
+                        <img src="./assets/images/Icon design.gif" width="150px" alt="Ícone de Design">
+                    </ul>
+                    <a href="#" class="choose-plan" data-plan-value="R$ 480,00">Escolher</a>
+                </div>
+                <div class="plan-card">
+                    <h3>Bimestral</h3>
+                    <p class="original-price">R$ 1.000,00</p>
+                    <p class="discounted-price">R$ 940,00</p>
+                    <p>6% Desconto</p>
+                    <p>Vinculação por 2 meses.</p>
+                    <ul>
+                        <img src="./assets/images/Icon design.gif" width="150px" alt="Ícone de Design">
+                    </ul>
+                    <a href="#" class="choose-plan" data-plan-value="R$ 940,00">Escolher</a>
+                </div>
+                <div class="plan-card">
+                    <h3>Trimestral</h3>
+                    <p class="original-price">R$ 1.500,00</p>
+                    <p class="discounted-price">R$ 1.380,00</p>
+                    <p>8% Desconto</p>
+                    <p>Vinculação por 3 meses.</p>
+                    <ul>
+                        <img src="./assets/images/Icon design.gif" width="150px" alt="Ícone de Design">
+                    </ul>
+                    <a href="#" class="choose-plan" data-plan-value="R$ 1.380,00">Escolher</a>
+                </div>
+                <div class="plan-card">
+                    <h3>Semestral</h3>
+                    <p class="original-price">R$ 3.000,00</p>
+                    <p class="discounted-price">R$ 2.700,00</p>
+                    <p>10% Desconto</p>
+                    <p>Vinculação por 6 meses.</p>
+                    <ul>
+                        <img src="./assets/images/Icon design.gif" width="150px" alt="Ícone de Design">
+                    </ul>
+                    <a href="#" class="choose-plan" data-plan-value="R$ 2.700,00">Escolher</a>
+                </div>
+                <div class="plan-card">
+                    <h3>Anual</h3>
+                    <p class="original-price">R$ 6.000,00</p>
+                    <p class="discounted-price">R$ 5.280,00</p>
+                    <p>12% Desconto</p>
+                    <p>Vinculação por 12 meses.</p>
+                    <ul>
+                        <img src="./assets/images/Icon design.gif" width="150px" alt="Ícone de Design">
+                    </ul>
+                    <a href="#" class="choose-plan" data-plan-value="R$ 5.280,00">Escolher</a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="linhas" class="routes">
+            <h2><i class='bx bx-bus'></i> Linhas de Ônibus</h2>
+
+
+            <div class="route-options">
+                <div class="route-card">
+                    <img src="./assets/images/linhas/953.jpg" alt="Linha 953" class="route-image">
+                    <p><strong>953</strong> | TERMINAL COLÔNIA <i class='bx bxs-right-arrow-alt'></i> TERMINAL CENTRAL</p>
+                </div>
+                <div class="route-card">
+                    <img src="./assets/images/linhas/961.jpg" alt="Linha 961" class="route-image">
+                    <p><strong>961</strong> | TERMINAL CECAP <i class='bx bxs-right-arrow-alt'></i> TERMINAL VILA ARENS</p>
+                </div>
+                <div class="route-card">
+                    <img src="./assets/images/linhas/957.jpg" alt="Linha 957" class="route-image">
+                    <p><strong>957</strong> | TERMINAL COLÔNIA <i class='bx bxs-right-arrow-alt'></i> TERMINAL HORTOLÂNDIA</p>
+                </div>
+                <div class="route-card">
+                    <img src="./assets/images/linhas/10.jpg" alt="Linha 10" class="route-image">
+                    <p><strong>10</strong> | IVUTURUCAIA <i class='bx bxs-right-arrow-alt'></i> DISTRITO INDUSTRIAL</p>
+                </div>
+                <div class="route-card">
+                    <img src="./assets/images/linhas/942.jpg" alt="Linha 942" class="route-image">
+                    <p><strong>942</strong> | JARDIM SAMAMBAIA <i class='bx bxs-right-arrow-alt'></i> CENTRO</p>
+                </div>
+                <div class="route-card">
+                    <img src="./assets/images/linhas/715.jpg" alt="Linha 715" class="route-image">
+                    <p><strong>715</strong> | TERMINAL VILA ARENS <i class='bx bxs-right-arrow-alt'></i> SÃO CAMILO <i class='bx bxs-right-arrow-alt'></i>TERMINAL COLÔNIA</p>
+                </div>
+                <div class="route-card">
+                    <img src="./assets/images/linhas/507.jpg" alt="Linha 507" class="route-image">
+                    <p><strong>507</strong> | JARDIM DO LAGO <i class='bx bxs-right-arrow-alt'></i> TERMINAL VILA ARENS</p>
+                </div>
+                <div class="route-card">
+                    <img src="./assets/images/linhas/570.jpg" alt="Linha 570" class="route-image">
+                    <p><strong>570</strong> | TERMINAL HORTOLÂNDIA <i class='bx bxs-right-arrow-alt'></i> DISTRITO INDUSTRIAL</p>
+                </div>
+                <div class="route-card">
+                    <img src="./assets/images/linhas/705.jpg" alt="Linha 705" class="route-image">
+                    <p><strong>705</strong> | JUNDIAÍ MIRIM <i class='bx bxs-right-arrow-alt'></i> TERMINAL</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="suporte" class="support">
+            <h2><i class='bx bx-support'></i> Suporte</h2>
+            <div class="support-content">
+                <div class="support-info">
+                    <h3>Como podemos ajudar?</h3>
+                    <p>Se você tiver dúvidas ou precisar de assistência, estamos aqui para ajudar. Escolha uma das opções abaixo para entrar em contato com nossa equipe de suporte:</p>
+                </div>
+                <div class="support-options">
+                    <div class="support-option">
+                        <i class='bx bxs-phone-call'></i>
+                        <h4>Telefone</h4>
+                        <p>Ligue para nossa central de atendimento: (11) 4002-8922</p>
+                    </div>
+                    <div class="support-option">
+                        <i class='bx bxl-whatsapp'></i>
+                        <h4>WhatsApp</h4>
+                        <p>Mande uma mensagem pelo WhatsApp: (11) 99999-9999</p>
+                    </div>
+                    <div class="support-option">
+                        <i class='bx bxs-envelope'></i>
+                        <h4>E-mail</h4>
+                        <p>Envie suas dúvidas para: suporte@carflax.com.br</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer class="footer">
+            <p>© 2024 Carflax. Todos os direitos reservados.</p>
+            <div class="social-links">
+                <a href="#" target="_blank"><i class='bx bxl-facebook'></i></a>
+                <a href="#" target="_blank"><i class='bx bxl-instagram'></i></a>
+                <a href="#" target="_blank"><i class='bx bxl-twitter'></i></a>
+            </div>
+        </footer>
+    </body>
+</html>
