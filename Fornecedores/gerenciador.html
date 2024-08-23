@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerenciador de Fornecedores</title>
+  <link rel="shortcut icon" href="/assets/images/Favicon.png" type="image/x-icon" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/Fornecedores/gerenciador.css" />
+</head>
+<body>
+  <header>
+    <div class="search">
+      <input id="search" type="text" placeholder="Buscar Fornecedor" />
+      <button id="adicionarfornecedor" aria-label="Adicionar Fornecedor"><i class='bx bxs-plus-circle'></i></button>
+      <button id="filter" aria-label="Filtrar Fornecedores"><i class='bx bx-filter'></i></button>
+    </div>
+  </header>
+
+  <main>
+    <div class="fornecedores">
+      <!-- Lista de fornecedores será inserida aqui -->
+    </div>
+  </main>
+
+  <!-- Modal de Pagamentos -->
+  <div id="payments-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="payments-modal-title">Histórico de Pagamentos</h2>
+        <span id="payments-close" class="close">&times;</span>
+      </div>
+      <div id="payments-content" class="modal-body">
+        <!-- Histórico de Pagamentos será inserido aqui -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulário de Pagamento -->
+  <div id="payment-form-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Adicionar Pagamento</h2>
+        <span id="payment-form-close" class="close">&times;</span>
+      </div>
+      <form id="payment-form">
+        <label for="data">Data:</label>
+        <input type="date" id="data" name="data" required>
+      
+        <label for="valor">Valor:</label>
+        <input type="text" id="valor" name="valor" required>
+      
+        <label for="nf">NF:</label>
+        <input type="text" id="nf" name="nf" required>
+      
+        <button type="submit">Salvar</button>
+      </form>
+      
+      
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação de Exclusão -->
+  <div id="confirm-delete-modal" class="modal">
+    <div class="modal-content confirm-delete-content">
+      <span class="close confirm-delete-close">&times;</span>
+      <h2>Confirmar Exclusão</h2>
+      <p>Você realmente deseja remover este pagamento?</p>
+      <button id="confirm-delete">Confirmar</button>
+      <button id="cancel-delete">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Modal de Fornecedor -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h2 id="modal-title">Adicionar Fornecedor</h2>
+      </div>
+      <form id="form-fornecedor">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required />
+
+        <label for="status">Situação:</label>
+        <select id="status" name="status">
+          <option value="true">Pagamento Confirmado</option>
+          <option value="false">Pagamento Pendente</option>
+        </select>
+
+        <label for="pagamento">Forma de Pagamento:</label>
+        <select id="pagamento" name="pagamento">
+          <option value="Mensal">Mensal</option>
+          <option value="Bimestral">Bimestral</option>
+          <option value="Trimestral">Trimestral</option>
+          <option value="Semestral">Semestral</option>
+          <option value="Anual">Anual</option>
+        </select>
+
+        <button type="submit" id="salvar"><i class="bx bxs-save"></i> Salvar</button>
+        <button type="button" id="delete-fornecedor"><i class="bx bxs-trash"></i> Excluir</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="./gerenciador.js"></script>
+
+</body>
+</html>
