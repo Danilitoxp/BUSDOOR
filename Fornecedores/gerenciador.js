@@ -1,6 +1,7 @@
 // Importa Firebase e Firestore
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
-import { getFirestore, collection, addDoc, updateDoc, doc, deleteDoc, getDocs } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js';
+import { getFirestore, collection, addDoc, updateDoc, doc, deleteDoc, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js';
+
 
 // Configuração do Firebase
 const firebaseConfig = {
@@ -15,7 +16,7 @@ const firebaseConfig = {
 // Inicializa o Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-let currentFornecedorId; 
+let currentFornecedorId;
 
 document.addEventListener("DOMContentLoaded", () => {
   // Elementos da página
@@ -42,14 +43,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${day}/${month}/${year}`;
   }
 
-  
   // Atualiza o conteúdo do modal de pagamentos
   function updatePaymentsModal(fornecedor) {
     elements.paymentsContent.innerHTML = `
       <h2>Histórico de Pagamentos para ${fornecedor.name}</h2>
       <ul>
         ${fornecedor.pagamentos && fornecedor.pagamentos.length
-          ? fornecedor.pagamentos.map(pagamento => `
+        ? fornecedor.pagamentos.map(pagamento => `
             <li>
               <span>Data:</span> ${formatDateToBR(pagamento.data)} <br>
               <span>Valor:</span> ${pagamento.valor} <br>
@@ -61,8 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 <i class="bx bxs-trash"></i> Excluir
               </button>
             </li>`).join("")
-          : "<li>Sem pagamentos registrados</li>"
-        }
+        : "<li>Sem pagamentos registrados</li>"
+      }
       </ul>
       <button id="add-payment" class="btn btn-primary">
         <i class="bx bxs-plus-circle"></i> Adicionar Pagamento
@@ -73,6 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Renderiza a lista de fornecedores
   function renderFornecedores(list) {
     elements.fornecedoresContainer.innerHTML = "";
+    // Ordena os fornecedores por nome
+    list.sort((a, b) => a.name.localeCompare(b.name));
     list.forEach(fornecedor => {
       const fornecedorElement = document.createElement("div");
       fornecedorElement.id = "fornecedor";
@@ -88,9 +90,9 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="botoes">
           <p id="ativo" class="${fornecedor.ativo ? "ativo" : "inativo"}">
             ${fornecedor.ativo
-              ? "<i class='bx bxs-calendar-check'></i> Em Dia"
-              : "<i class='bx bx-error-alt'></i> Atrasado"
-            }
+          ? "<i class='bx bxs-calendar-check'></i> Em Dia"
+          : "<i class='bx bx-error-alt'></i> Atrasado"
+        }
           </p>
           <label for="pagamento" class="upload-button">
             <i class='bx bx-briefcase-alt-2'></i> ${fornecedor.pagamento}
@@ -107,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-    // Abre o modal de pagamentos
+  // Abre o modal de pagamentos
   function openPaymentsModal(fornecedor) {
     updatePaymentsModal(fornecedor);
     elements.paymentsModal.style.display = "block";
@@ -135,17 +137,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-    // Atualiza um fornecedor no Firestore
-async function updateFornecedor(id, fornecedor) {
-  try {
-    const fornecedorRef = doc(db, "fornecedores", id);
-    const pagamentos = fornecedor.pagamentos || []; // Garante que pagamentos não seja undefined
-    await updateDoc(fornecedorRef, { ...fornecedor, pagamentos });
-    console.log("Fornecedor atualizado com ID: ", id);
-  } catch (error) {
-    console.error("Erro ao atualizar fornecedor: ", error);
+  // Atualiza um fornecedor no Firestore
+  async function updateFornecedor(id, fornecedor) {
+    try {
+      const fornecedorRef = doc(db, "fornecedores", id);
+      const pagamentos = fornecedor.pagamentos || []; // Garante que pagamentos não seja undefined
+      await updateDoc(fornecedorRef, { ...fornecedor, pagamentos });
+      console.log("Fornecedor atualizado com ID: ", id);
+    } catch (error) {
+      console.error("Erro ao atualizar fornecedor: ", error);
+    }
   }
-}
 
 
 
@@ -177,6 +179,7 @@ async function updateFornecedor(id, fornecedor) {
     elements.formFornecedor.dataset.id = "";
     elements.deleteButton.style.display = "none";
     elements.modal.style.display = "block";
+    document.getElementById('inputLogo').style.display = 'none'; // Esconde o input de logo na criação
   });
 
   // Evento de fechamento dos modais
@@ -185,7 +188,7 @@ async function updateFornecedor(id, fornecedor) {
     elements.paymentsModal.style.display = "none";
     elements.paymentFormModal.style.display = "none";
   }
-  
+
 
   elements.closeModal.addEventListener("click", closeModals);
   elements.paymentsClose.addEventListener("click", () => {
@@ -197,61 +200,70 @@ async function updateFornecedor(id, fornecedor) {
 
   window.addEventListener("click", (e) => {
     if (e.target === elements.modal ||
-        e.target === elements.paymentsModal ||
-        e.target === elements.paymentFormModal) {
+      e.target === elements.paymentsModal ||
+      e.target === elements.paymentFormModal) {
       closeModals();
     }
   });
-  
+
 
   // Evento de submissão do formulário de fornecedor
-elements.formFornecedor.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const id = elements.formFornecedor.dataset.id;
-  const name = elements.formFornecedor.nome.value;
-  const ativo = elements.formFornecedor.status.value === "true";
-  const pagamento = elements.formFornecedor.pagamento.value;
+  elements.formFornecedor.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const id = elements.formFornecedor.dataset.id;
+    const name = elements.formFornecedor.nome.value;
+    const ativo = elements.formFornecedor.status.value === "true";
+    const pagamento = elements.formFornecedor.pagamento.value;
 
-  // Cria o objeto fornecedor com os campos necessários
-  const fornecedor = { name, ativo, pagamento };
+    // Verifica se o fornecedor já existe
+    if (!id && await checkFornecedorDuplicado(name)) {
+      alert("Já existe um fornecedor com esse nome!");
+      return;
+    }
 
-  if (id) {
-    // Obtém o fornecedor existente para preservar os pagamentos
-    const fornecedorAtual = (await getFornecedores()).find(f => f.id === id);
+    const fornecedor = { name, ativo, pagamento };
 
-    // Atualiza o fornecedor com os dados novos, mantendo a lista de pagamentos existente
-    await updateFornecedor(id, { ...fornecedor, pagamentos: fornecedorAtual.pagamentos || [] });
-  } else {
-    await addFornecedor(fornecedor);
+    if (id) {
+      const fornecedorAtual = (await getFornecedores()).find(f => f.id === id);
+      await updateFornecedor(id, { ...fornecedor, pagamentos: fornecedorAtual.pagamentos || [] });
+    } else {
+      await addFornecedor(fornecedor);
+    }
+
+    const fornecedores = await getFornecedores();
+    renderFornecedores(fornecedores);
+    closeModals();
+  });
+
+  async function checkFornecedorDuplicado(name) {
+    const fornecedoresRef = collection(db, "fornecedores");
+    const q = query(fornecedoresRef, where("name", "==", name));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
   }
-
-  const fornecedores = await getFornecedores();
-  renderFornecedores(fornecedores);
-  closeModals();
-});
 
 
   // Evento de clique na lista de fornecedores
-elements.fornecedoresContainer.addEventListener("click", async (e) => {
-  const fornecedorElement = e.target.closest("#fornecedor");
-  if (!fornecedorElement) return;
+  elements.fornecedoresContainer.addEventListener("click", async (e) => {
+    const fornecedorElement = e.target.closest("#fornecedor");
+    if (!fornecedorElement) return;
 
-  const id = fornecedorElement.dataset.id;
-  const fornecedores = await getFornecedores();
-  const fornecedor = fornecedores.find(f => f.id === id);
+    const id = fornecedorElement.dataset.id;
+    const fornecedores = await getFornecedores();
+    const fornecedor = fornecedores.find(f => f.id === id);
 
-  if (e.target.classList.contains("historico-pagamentos")) {
-    openPaymentsModal(fornecedor);
-  } else if (e.target.classList.contains("editar")) {
-    elements.modalTitle.textContent = "Editar Fornecedor";
-    elements.formFornecedor.nome.value = fornecedor.name;
-    elements.formFornecedor.status.value = fornecedor.ativo? "true" : "false";
-    elements.formFornecedor.pagamento.value = fornecedor.pagamento;
-    elements.formFornecedor.dataset.id = id;
-    elements.deleteButton.style.display = "block";
-    elements.modal.style.display = "block";
-  }
-});
+    if (e.target.classList.contains("historico-pagamentos")) {
+      openPaymentsModal(fornecedor);
+    } else if (e.target.classList.contains("editar")) {
+      elements.modalTitle.textContent = "Editar Fornecedor";
+      elements.formFornecedor.nome.value = fornecedor.name;
+      elements.formFornecedor.status.value = fornecedor.ativo ? "true" : "false";
+      elements.formFornecedor.pagamento.value = fornecedor.pagamento;
+      elements.formFornecedor.dataset.id = id;
+      elements.deleteButton.style.display = "block";
+      elements.modal.style.display = "block";
+    }
+  });
 
 
   // Evento de exclusão de fornecedor
@@ -264,7 +276,7 @@ elements.fornecedoresContainer.addEventListener("click", async (e) => {
     closeModals();
   });
 
-    // Evento de adição de pagamento
+  // Evento de adição de pagamento
   elements.paymentsContent.addEventListener("click", async (e) => {
     if (e.target.id === "add-payment") {
       elements.paymentFormModal.style.display = "block";
@@ -298,73 +310,70 @@ elements.fornecedoresContainer.addEventListener("click", async (e) => {
     }
   });
 
-          // Evento de exclusão de pagamento
-    elements.paymentsContent.addEventListener("click", async (e) => {
-      if (e.target.classList.contains("delete-payment")) {
-        const nf = e.target.dataset.nf;
-        const fornecedorId = elements.fornecedoresContainer.querySelector("[data-id]").dataset.id;
+  // Evento de exclusão de pagamento
+  elements.paymentsContent.addEventListener("click", async (e) => {
+    if (e.target.classList.contains("delete-payment")) {
+      const nf = e.target.dataset.nf;
+      const fornecedorId = currentFornecedorId;
 
-        try {
-          const fornecedorRef = doc(db, "fornecedores", fornecedorId);
-          const fornecedor = (await getFornecedores()).find(f => f.id === fornecedorId);
+      try {
+        const fornecedorRef = doc(db, "fornecedores", fornecedorId);
+        const fornecedor = (await getFornecedores()).find(f => f.id === fornecedorId);
 
-          // Verifica se o fornecedor foi encontrado
-          if (!fornecedor) {
-            console.error("Fornecedor não encontrado");
-            return;
-          }
-
-          // Verifica se `fornecedor.pagamentos` é um array
-          const pagamentos = Array.isArray(fornecedor.pagamentos) 
-          ? fornecedor.pagamentos.filter(p => p.nf!== nf) 
-            : [];
-
-          // Atualiza o documento do fornecedor com a lista filtrada de pagamentos
-          await updateDoc(fornecedorRef, { pagamentos });
-
-          // Atualiza a interface com a lista atualizada de fornecedores
-          const fornecedores = await getFornecedores();
-          renderFornecedores(fornecedores);
-
-          // Atualiza o modal de pagamentos
-          openPaymentsModal(fornecedor);
-
-          // Fecha o modal de pagamentos
-          closeModals();
-        } catch (error) {
-          console.error("Erro ao excluir pagamento: ", error);
+        if (!fornecedor) {
+          console.error("Fornecedor não encontrado");
+          return;
         }
+
+        // Mantém apenas os pagamentos que NÃO correspondem à nota fiscal (nf) a ser excluída
+        const pagamentos = fornecedor.pagamentos.filter(p => p.nf !== nf);
+
+        // Atualiza o documento do fornecedor com a nova lista de pagamentos
+        await updateDoc(fornecedorRef, { pagamentos });
+
+        // Atualiza a interface do usuário com os fornecedores atualizados
+        const fornecedores = await getFornecedores();
+        renderFornecedores(fornecedores);
+
+        // Fecha o modal de pagamentos após a exclusão
+        closeModals();
+
+      } catch (error) {
+        console.error("Erro ao excluir pagamento: ", error);
       }
-    });
+    }
+  });
 
-    // Evento de submissão do formulário de pagamento
-elements.paymentForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const fornecedorId = currentFornecedorId; // Usa o ID do fornecedor armazenado
-  const nf = elements.paymentForm.dataset.nf;
-  const data = elements.paymentForm.data.value;
-  const valor = elements.paymentForm.valor.value;
-  const pagamentoNF = elements.paymentForm.nf.value;
 
-  const fornecedorRef = doc(db, "fornecedores", fornecedorId);
-  const fornecedor = (await getFornecedores()).find(f => f.id === fornecedorId);
 
-  // Atualiza ou adiciona pagamento
-  const pagamentos = fornecedor.pagamentos || [];
-  const pagamentoIndex = pagamentos.findIndex(p => p.nf === nf);
-  
-  if (pagamentoIndex > -1) {
-    pagamentos[pagamentoIndex] = { data, valor, nf: pagamentoNF };
-  } else {
-    pagamentos.push({ data, valor, nf: pagamentoNF });
-  }
+  // Evento de submissão do formulário de pagamento
+  elements.paymentForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const fornecedorId = currentFornecedorId; // Usa o ID do fornecedor armazenado
+    const nf = elements.paymentForm.dataset.nf;
+    const data = elements.paymentForm.data.value;
+    const valor = elements.paymentForm.valor.value;
+    const pagamentoNF = elements.paymentForm.nf.value;
 
-  await updateDoc(fornecedorRef, { pagamentos });
+    const fornecedorRef = doc(db, "fornecedores", fornecedorId);
+    const fornecedor = (await getFornecedores()).find(f => f.id === fornecedorId);
 
-  const fornecedores = await getFornecedores();
-  renderFornecedores(fornecedores);
-  closeModals();
-});
+    // Atualiza ou adiciona pagamento
+    const pagamentos = fornecedor.pagamentos || [];
+    const pagamentoIndex = pagamentos.findIndex(p => p.nf === nf);
+
+    if (pagamentoIndex > -1) {
+      pagamentos[pagamentoIndex] = { data, valor, nf: pagamentoNF };
+    } else {
+      pagamentos.push({ data, valor, nf: pagamentoNF });
+    }
+
+    await updateDoc(fornecedorRef, { pagamentos });
+
+    const fornecedores = await getFornecedores();
+    renderFornecedores(fornecedores);
+    closeModals();
+  });
 
 
 
