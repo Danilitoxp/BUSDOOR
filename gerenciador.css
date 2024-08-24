@@ -1,0 +1,576 @@
+/* Estilos Globais */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+  outline: none;
+}
+
+body {
+  background-color: #cccccc3a;
+  font-size: 62.5%;
+  height: 100vh;
+}
+
+header {
+  display: flex;
+  padding: 1rem;
+}
+
+main {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search {
+  text-align: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  display: flex;
+}
+
+#search {
+  margin: 0px 1%;
+}
+
+#filter {
+  width: 2.3rem;
+  border-radius: 50%;
+  background-color: transparent;
+}
+
+#filter i {
+  font-size: 30px;
+  color: #003688;
+}
+
+button {
+  font-weight: 600;
+}
+
+#adicionarfornecedor i {
+  font-size: 25px;
+}
+
+.search input {
+  width: 30rem;
+  padding: 0.5rem 1rem;
+  height: 100%;
+  border-radius: 1rem;
+  border: none;
+}
+
+.search button {
+  cursor: pointer;
+  border: none;
+  border-radius: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.botoes .editar {
+  background-color: #003688;
+  color: white;
+}
+
+/* Estilos Responsivos */
+@media (max-width: 768px) {
+  .search input {
+    width: 70%;
+  }
+
+  .search button {
+    width: 4rem;
+    height: 2rem;
+    font-size: 0.9rem;
+  }
+
+  .search button img {
+    width: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    display: flex;
+    padding: 1rem;
+  }
+
+  .search {
+    width: 100%;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .search input {
+    width: 100%;
+  }
+
+  .search button {
+    width: 4rem;
+    font-size: 1rem;
+  }
+
+  .search button img {
+    width: 1.2rem;
+  }
+
+  #adicionarfornecedor {
+    border: none;
+    color: black;
+    cursor: pointer;
+    font-weight: 600;
+  }
+}
+
+/* Restante dos Estilos */
+#adicionarfornecedor {
+  border: none;
+  color: #003688;
+  cursor: pointer;
+  background-color: transparent;
+  font-size: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.search {
+  gap: 10px;
+}
+
+.fornecedores {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+/* Estilo de cada Fornecedor */
+#fornecedor {
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: #fff;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+#fornecedor:hover {
+  transform: translateY(-5px);
+}
+
+#fornecedor img {
+  height: 8rem;
+  object-fit: cover;
+  margin: 1rem 7rem;
+}
+
+#fornecedor .info {
+  text-align: center;
+}
+
+#fornecedor h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: #003688;
+}
+
+#fornecedor p {
+  font-size: 1rem;
+}
+
+.botoes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  align-items: center;
+}
+
+.historico-pagamentos {
+    background-color: rgb(0, 110, 59);
+    color: white;
+}
+
+.upload-button {
+  cursor: pointer;
+  background-color: #0084e7;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  transition: background-color 0.3s, color 0.3s;
+  display: inline-block;
+}
+
+.upload-button:hover {
+  background-color: #003688;
+  color: white;
+}
+
+.ativo {
+  background-color: green;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.inativo {
+  background-color: red;
+  border-radius: 0.5rem;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.ativo:hover {
+  background-color: rgb(0, 78, 0);
+  color: white;
+  font-weight: 600;
+}
+
+.inativo:hover {
+  font-weight: 600;
+  background-color: rgb(112, 0, 0);
+  color: white;
+}
+
+.custom-file-upload {
+  cursor: pointer;
+  border: 1px solid #003688;
+  background-color: #fff;
+  color: #003688;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 1.4rem;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.custom-file-upload:hover {
+  background-color: #003688;
+  width: 100%;
+  color: #fff;
+}
+
+#delete-fornecedor {
+  display: none;
+  cursor: pointer;
+  background-color: #003688;
+  color: white;
+  font-weight: 600;
+}
+
+#salvar {
+  cursor: pointer;
+  background-color: green;
+  color: white;
+  font-weight: 600;
+}
+
+.botoes button {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  text-align: center;
+}
+
+.botoes button:hover {
+  background-color: #003688;
+  color: white;
+}
+
+.modal {
+  display: none; /* Escondido por padrão */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+}
+
+/* Estilo do cabeçalho do modal */
+.modal-header {
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.modal-header h2 {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.modal-header .close {
+  font-size: 1.5rem;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.modal-header .close:hover {
+  color: #333;
+}
+
+/* Estilo do conteúdo do modal */
+.modal-body {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Estilizando o modal de pagamentos */
+#payments-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Estilos do Modal de Confirmação de Exclusão */
+.confirm-delete-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.confirm-delete-content h2 {
+  margin-bottom: 1rem;
+}
+
+.confirm-delete-content p {
+  margin-bottom: 1.5rem;
+}
+
+.confirm-delete-content button {
+  background-color: #007fc8;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 10px;
+  transition: background-color 0.3s;
+}
+
+.confirm-delete-content button:hover {
+  background-color: #005a9c;
+}
+
+.confirm-delete-content #cancel-delete {
+  background-color: #f44336;
+}
+
+.confirm-delete-content #cancel-delete:hover {
+  background-color: #c62828;
+}
+
+.confirm-delete-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#payments-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
+}
+
+#payments-content h2 {
+  margin: 1rem 0px;
+  color: #333;
+}
+
+#payments-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+#payments-content ul li {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+#payments-content ul li span {
+  font-weight: bold;
+  color: #555;
+}
+
+#payments-content button {
+  background-color: #007fc8;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+#payments-content button:hover {
+  background-color: #005a9c;
+}
+
+/* Estilizando o formulário de pagamento */
+#payment-form-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Adicionando estilização para editar pagamento */
+#payments-content .edit-payment {
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+#payments-content .edit-payment:hover {
+  background-color: #e68900;
+}
+
+#payment-form-modal .modal-content {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 500px;
+  position: relative;
+}
+
+#payment-form-modal .modal-content h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+#payment-form-modal input {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+#payment-form-modal button {
+  background-color: #007fc8;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.payment-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#payment-form-modal button:hover {
+  background-color: #005a9c;
+}
+
+#payments-close,
+#payment-form-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#form-fornecedor {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#form-fornecedor input,
+#form-fornecedor select,
+#form-fornecedor button {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+}
