@@ -15,6 +15,7 @@ const firebaseConfig = {
 // Inicializa o Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+let currentFornecedorId; 
 
 document.addEventListener("DOMContentLoaded", () => {
   // Elementos da página
@@ -41,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${day}/${month}/${year}`;
   }
 
+  
   // Atualiza o conteúdo do modal de pagamentos
   function updatePaymentsModal(fornecedor) {
     elements.paymentsContent.innerHTML = `
@@ -105,10 +107,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Abre o modal de pagamentos
+    // Abre o modal de pagamentos
   function openPaymentsModal(fornecedor) {
     updatePaymentsModal(fornecedor);
     elements.paymentsModal.style.display = "block";
+    currentFornecedorId = fornecedor.id; // Armazena o ID do fornecedor
   }
 
   // Obtém todos os fornecedores do Firestore
@@ -229,26 +232,27 @@ elements.formFornecedor.addEventListener("submit", async (e) => {
 
 
   // Evento de clique na lista de fornecedores
-  elements.fornecedoresContainer.addEventListener("click", async (e) => {
-    const fornecedorElement = e.target.closest("#fornecedor");
-    if (!fornecedorElement) return;
+elements.fornecedoresContainer.addEventListener("click", async (e) => {
+  const fornecedorElement = e.target.closest("#fornecedor");
+  if (!fornecedorElement) return;
 
-    const id = fornecedorElement.dataset.id;
-    const fornecedores = await getFornecedores();
-    const fornecedor = fornecedores.find(f => f.id === id);
+  const id = fornecedorElement.dataset.id;
+  const fornecedores = await getFornecedores();
+  const fornecedor = fornecedores.find(f => f.id === id);
 
-    if (e.target.classList.contains("historico-pagamentos")) {
-      openPaymentsModal(fornecedor);
-    } else if (e.target.classList.contains("editar")) {
-      elements.modalTitle.textContent = "Editar Fornecedor";
-      elements.formFornecedor.nome.value = fornecedor.name;
-      elements.formFornecedor.status.value = fornecedor.ativo ? "true" : "false";
-      elements.formFornecedor.pagamento.value = fornecedor.pagamento;
-      elements.formFornecedor.dataset.id = id;
-      elements.deleteButton.style.display = "block";
-      elements.modal.style.display = "block";
-    }
-  });
+  if (e.target.classList.contains("historico-pagamentos")) {
+    openPaymentsModal(fornecedor);
+  } else if (e.target.classList.contains("editar")) {
+    elements.modalTitle.textContent = "Editar Fornecedor";
+    elements.formFornecedor.nome.value = fornecedor.name;
+    elements.formFornecedor.status.value = fornecedor.ativo? "true" : "false";
+    elements.formFornecedor.pagamento.value = fornecedor.pagamento;
+    elements.formFornecedor.dataset.id = id;
+    elements.deleteButton.style.display = "block";
+    elements.modal.style.display = "block";
+  }
+});
+
 
   // Evento de exclusão de fornecedor
   elements.deleteButton.addEventListener("click", async () => {
@@ -294,77 +298,73 @@ elements.formFornecedor.addEventListener("submit", async (e) => {
     }
   });
 
-      // Evento de exclusão de pagamento
-      elements.paymentsContent.addEventListener("click", async (e) => {
-        if (e.target.classList.contains("delete-payment")) {
-          const nf = e.target.dataset.nf;
-          const fornecedorId = elements.fornecedoresContainer.querySelector("[data-id]").dataset.id;
-      
-          try {
-            const fornecedorRef = doc(db, "fornecedores", fornecedorId);
-            const fornecedor = (await getFornecedores()).find(f => f.id === fornecedorId);
-      
-            // Verifica se o fornecedor foi encontrado
-            if (!fornecedor) {
-              console.error("Fornecedor não encontrado");
-              return;
-            }
-      
-            // Verifica se `fornecedor.pagamentos` é um array
-            const pagamentos = Array.isArray(fornecedor.pagamentos) 
-              ? fornecedor.pagamentos.filter(p => p.nf !== nf) 
-              : [];
-      
-            // Atualiza o documento do fornecedor com a lista filtrada de pagamentos
-            await updateDoc(fornecedorRef, { pagamentos });
-      
-            // Atualiza a interface com a lista atualizada de fornecedores
-            const fornecedores = await getFornecedores();
-            renderFornecedores(fornecedores);
-      
-            // Atualiza o modal de pagamentos
-            openPaymentsModal(fornecedor);
-      
-            // Fecha o modal de pagamentos
-            closeModals();
-          } catch (error) {
-            console.error("Erro ao excluir pagamento: ", error);
-          }
-        }
-      });
-      
+          // Evento de exclusão de pagamento
+    elements.paymentsContent.addEventListener("click", async (e) => {
+      if (e.target.classList.contains("delete-payment")) {
+        const nf = e.target.dataset.nf;
+        const fornecedorId = elements.fornecedoresContainer.querySelector("[data-id]").dataset.id;
 
-
-
-        // Evento de submissão do formulário de pagamento
-        elements.paymentForm.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const fornecedorId = elements.fornecedoresContainer.querySelector("[data-id]").dataset.id;
-          const nf = elements.paymentForm.dataset.nf;
-          const data = elements.paymentForm.data.value;
-          const valor = elements.paymentForm.valor.value;
-          const pagamentoNF = elements.paymentForm.nf.value;
-
+        try {
           const fornecedorRef = doc(db, "fornecedores", fornecedorId);
           const fornecedor = (await getFornecedores()).find(f => f.id === fornecedorId);
 
-          // Atualiza ou adiciona pagamento
-          const pagamentos = fornecedor.pagamentos || [];
-          const pagamentoIndex = pagamentos.findIndex(p => p.nf === nf);
-          
-          if (pagamentoIndex > -1) {
-            pagamentos[pagamentoIndex] = { data, valor, nf: pagamentoNF };
-          } else {
-            pagamentos.push({ data, valor, nf: pagamentoNF });
+          // Verifica se o fornecedor foi encontrado
+          if (!fornecedor) {
+            console.error("Fornecedor não encontrado");
+            return;
           }
 
+          // Verifica se `fornecedor.pagamentos` é um array
+          const pagamentos = Array.isArray(fornecedor.pagamentos) 
+          ? fornecedor.pagamentos.filter(p => p.nf!== nf) 
+            : [];
+
+          // Atualiza o documento do fornecedor com a lista filtrada de pagamentos
           await updateDoc(fornecedorRef, { pagamentos });
 
+          // Atualiza a interface com a lista atualizada de fornecedores
           const fornecedores = await getFornecedores();
           renderFornecedores(fornecedores);
-          closeModals();
-        });
 
+          // Atualiza o modal de pagamentos
+          openPaymentsModal(fornecedor);
+
+          // Fecha o modal de pagamentos
+          closeModals();
+        } catch (error) {
+          console.error("Erro ao excluir pagamento: ", error);
+        }
+      }
+    });
+
+    // Evento de submissão do formulário de pagamento
+elements.paymentForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const fornecedorId = currentFornecedorId; // Usa o ID do fornecedor armazenado
+  const nf = elements.paymentForm.dataset.nf;
+  const data = elements.paymentForm.data.value;
+  const valor = elements.paymentForm.valor.value;
+  const pagamentoNF = elements.paymentForm.nf.value;
+
+  const fornecedorRef = doc(db, "fornecedores", fornecedorId);
+  const fornecedor = (await getFornecedores()).find(f => f.id === fornecedorId);
+
+  // Atualiza ou adiciona pagamento
+  const pagamentos = fornecedor.pagamentos || [];
+  const pagamentoIndex = pagamentos.findIndex(p => p.nf === nf);
+  
+  if (pagamentoIndex > -1) {
+    pagamentos[pagamentoIndex] = { data, valor, nf: pagamentoNF };
+  } else {
+    pagamentos.push({ data, valor, nf: pagamentoNF });
+  }
+
+  await updateDoc(fornecedorRef, { pagamentos });
+
+  const fornecedores = await getFornecedores();
+  renderFornecedores(fornecedores);
+  closeModals();
+});
 
 
 
