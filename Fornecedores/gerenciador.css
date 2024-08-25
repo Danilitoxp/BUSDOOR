@@ -4,6 +4,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
+  outline: none;
 }
 
 body {
@@ -37,15 +38,19 @@ main {
   margin: 0px 1%;
 }
 
-#filter {
-  width: 2.3rem;
+#logout {
+  width: 2rem;
   border-radius: 50%;
   background-color: transparent;
 }
 
-#filter i {
-  font-size: 30px;
+#logout i {
+  font-size: 25px;
   color: #003688;
+}
+
+#logout i:hover {
+  opacity: 0.8;
 }
 
 button {
@@ -306,38 +311,42 @@ button {
   color: white;
 }
 
+/* Modal */
 .modal {
-  display: none; /* Escondido por padrão */
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0; 
+  top: 0; 
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgba(0,0,0,0.4); 
 }
 
 .modal-content {
   background-color: #fefefe;
-  margin: 5% auto;
-  padding: 20px;
+  margin: 15% auto; 
+  padding: 20px; 
   border: 1px solid #888;
-  width: 80%;
+  width: 80%; 
   max-width: 600px;
+  border-radius: 10px; 
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2); 
 }
 
-/* Estilo do cabeçalho do modal */
 .modal-header {
-  text-align: center;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 1rem;
-  margin-bottom: 1rem;
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  border-bottom: 1px solid #ddd; 
+  padding-bottom: 10px; 
+  margin-bottom: 20px; 
 }
+
 
 .modal-header h2 {
-  font-size: 1.5rem;
-  color: #333;
+  margin: 0; 
 }
 
 .modal-header .close {
@@ -553,6 +562,12 @@ button {
   font-weight: bold;
 }
 
+#payment-form {
+  display: flex; 
+  flex-direction: column; 
+  font-size: 14px;
+}
+
 .close:hover,
 .close:focus {
   color: black;
@@ -573,3 +588,60 @@ button {
   border-radius: 0.5rem;
   border: 1px solid #ccc;
 }
+
+.notifications {
+  position: fixed;
+  top: 80%;
+  right: 2%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+}
+
+.notifications-success {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 15px;
+  padding: 20px;
+  border-radius: 10px;
+  width: 350px;
+  background-color: #e0f7fa;
+  border-left: 5px solid #005a9c;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  animation: slideIn 0.5s ease-in-out, fadeOut 0.5s 4.5s ease-in-out forwards;
+}
+
+.notifications-success i {
+  font-size: 30px;
+  color: #005a9c;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.close-btn {
+  margin-left: auto;
+  font-size: 25px;
+  cursor: pointer;
+  color: #333;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+

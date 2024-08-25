@@ -131,6 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
     closeModals();
   });
 
+  
 
   // Renderiza a lista de fornecedores
   function renderFornecedores(list) {
@@ -263,39 +264,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // Evento de submissão do formulário de pagamento
-  elements.paymentForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    try {
+elements.paymentForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  try {
       const fornecedorId = currentFornecedorId; // Usa o ID do fornecedor armazenado
       const nf = elements.paymentForm.dataset.nf;
       const data = elements.paymentForm.data.value;
       const valor = elements.paymentForm.valor.value;
       const pagamentoNF = elements.paymentForm.nf.value;
-  
+
       const fornecedorRef = doc(db, "fornecedores", fornecedorId);
       const fornecedor = (await getFornecedores()).find(f => f.id === fornecedorId);
-  
+
       // Atualiza ou adiciona pagamento
       const pagamentos = fornecedor.pagamentos || [];
       const pagamentoIndex = pagamentos.findIndex(p => p.nf === nf);
-  
+
       if (pagamentoIndex > -1) {
-        pagamentos[pagamentoIndex] = { data, valor, nf: pagamentoNF };
-        console.log(`Pagamento com NF ${pagamentoNF} atualizado com sucesso! ✔`);
+          // Editando um pagamento existente
+          pagamentos[pagamentoIndex] = { data, valor, nf: pagamentoNF };
+          await updateDoc(fornecedorRef, { pagamentos });
+          console.log(`Pagamento com NF ${pagamentoNF} atualizado com sucesso! ✔`);
+          // Exibe notificação de sucesso para edição
+          showNotification("Sucesso", `Pagamento com NF ${pagamentoNF} atualizado com sucesso!`);
       } else {
-        pagamentos.push({ data, valor, nf: pagamentoNF });
-        console.log(`Pagamento com NF ${pagamentoNF} adicionado com sucesso! ✔`);
+          // Adicionando um novo pagamento
+          pagamentos.push({ data, valor, nf: pagamentoNF });
+          await updateDoc(fornecedorRef, { pagamentos });
+          console.log(`Pagamento com NF ${pagamentoNF} adicionado com sucesso! ✔`);
+          // Exibe notificação de sucesso para adição
+          showNotification("Sucesso", `Pagamento com NF ${pagamentoNF} adicionado com sucesso!`);
       }
-  
-      await updateDoc(fornecedorRef, { pagamentos });
-  
+
       const fornecedores = await getFornecedores();
       renderFornecedores(fornecedores);
       closeModals();
-    } catch (error) {
+  } catch (error) {
       console.error("Erro ao processar pagamento: ", error);
-    }
-  });
+      // Opcional: Exibir notificação de erro
+      showNotification("Erro", "Ocorreu um erro ao processar o pagamento.");
+  }
+});
+
   
 
   // Evento de exclusão de pagamento
@@ -342,8 +352,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ? fornecedor.pagamentos.map(pagamento => `
           <li>
             <span>Data:</span> ${formatDateToBR(pagamento.data)} <br>
-            <span>Valor:</span> ${pagamento.valor} <br>
-            <span>NF:</span> ${pagamento.nf} <br>
+            <span>Valor:</span> R$ ${pagamento.valor} <br>
+            <span>NF:</span> N° ${pagamento.nf} <br>
             <button class="edit-payment" data-nf="${pagamento.nf}">
               <i class="bx bxs-edit"></i> Editar
             </button>
@@ -421,6 +431,68 @@ document.addEventListener("DOMContentLoaded", () => {
     const [year, month, day] = dateString.split("-");
     return `${day}/${month}/${year}`;
   }
+
+
+  ////////////////////////////////// NOTIFCAÇÕES //////////////////////////////////
+  
+
+  
+  function showNotification(title, message) {
+    const notification = document.getElementById('notification');
+
+    // Define o conteúdo da notificação
+    notification.innerHTML = `
+        <i class='bx bxs-check-circle'></i>
+        <div class="text">
+            <span id="notification-title">${title}</span>
+            <p id="notification-message">${message}</p>
+        </div>
+        <span class="close-btn">&times;</span>
+    `;
+
+    // Exibe a notificação
+    notification.style.display = 'flex'; // Use 'flex' para alinhar itens horizontalmente
+    
+    // Oculta a notificação após 3 segundos
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 3000);
+}
+
+// Adiciona o listener para o botão de fechar
+document.addEventListener('click', (event) => {
+    if (event.target.classList.contains('close-btn')) {
+        event.target.closest('.notifications-success').style.display = 'none';
+    }
+});
+
+
+async function addFornecedor(fornecedor) {
+    try {
+        const docRef = await addDoc(collection(db, "fornecedores"), fornecedor);
+        showNotification("Sucesso", "Fornecedor adicionado com sucesso!");
+    } catch (error) {
+        console.error("Erro ao adicionar fornecedor: ", error);
+    }
+}
+
+async function updateFornecedor(id, fornecedor) {
+    try {
+        const fornecedorRef = doc(db, "fornecedores", id);
+        const pagamentos = fornecedor.pagamentos || [];
+        await updateDoc(fornecedorRef, { ...fornecedor, pagamentos });
+        showNotification("Sucesso", `Fornecedor atualizado com ID: ${id}`);
+    } catch (error) {
+        console.error("Erro ao atualizar fornecedor: ", error);
+    }
+}
+
+
+// Função para Fechar Modal de Notificações
+document.querySelector('.close-btn').addEventListener('click', function() {
+    document.querySelector('.notifications').style.display = 'none';
+});
+
 
   // Inicializa a lista de fornecedores
   getFornecedores().then(fornecedores => renderFornecedores(fornecedores));

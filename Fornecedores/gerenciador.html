@@ -13,13 +13,24 @@
     <div class="search">
       <input id="search" type="text" placeholder="Buscar Fornecedor" />
       <button id="adicionarfornecedor" aria-label="Adicionar Fornecedor"><i class='bx bxs-plus-circle'></i></button>
-      <button id="filter" aria-label="Filtrar Fornecedores"><i class='bx bx-filter'></i></button>
+      <a href="/index.html"><button id="logout" aria-label="Filtrar Fornecedores"><i class='bx bx-exit'></i></button></a>
     </div>
   </header>
 
   <main>
     <div class="fornecedores">
       <!-- Lista de fornecedores será inserida aqui -->
+    </div>
+
+    <div class="notifications">
+      <div id="notification" class="notifications-success" style="display: none;">
+        <i class='bx bxs-check-circle'></i>
+        <div class="text">
+          <span id="notification-title">Sucesso</span>
+          <p id="notification-message">Pagamento confirmado com sucesso!</p>
+        </div>
+        <span class="close-btn">&times;</span>
+      </div>
     </div>
   </main>
 
@@ -37,26 +48,34 @@
   </div>
 
   <!-- Formulário de Pagamento -->
-  <div id="payment-form-modal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Adicionar Pagamento</h2>
-        <span id="payment-form-close" class="close">&times;</span>
-      </div>
-      <form id="payment-form">
-        <label for="data">Data:</label>
-        <input type="date" id="data" name="data" required>
-      
-        <label for="valor">Valor:</label>
-        <input type="text" id="valor" name="valor" required>
-      
-        <label for="nf">NF:</label>
-        <input type="text" id="nf" name="nf" required>
-      
-        <button type="submit">Salvar</button>
-      </form>
+<div id="payment-form-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Adicionar Pagamento</h2>
+      <span id="payment-form-close" class="close"><i class="bx bx-x"></i></span>
     </div>
+    <form id="payment-form">
+      <label for="data">
+        </i> Data:
+      </label>
+      <input type="date" id="data" name="data" required>
+    
+      <label for="valor">
+        </i> Valor:
+      </label>
+      <input type="number" placeholder="R$ 480"  id="valor" name="valor" required>
+    
+      <label for="nf">
+        </i> NF:
+      </label>
+      <input type="text" placeholder="N° 00175" id="nf" name="nf" required>
+    
+      <button type="submit">
+        <i class="bx bx-save"></i> Salvar
+      </button>
+    </form>
   </div>
+</div>
 
 
   <!-- Modal de Confirmação de Exclusão -->
