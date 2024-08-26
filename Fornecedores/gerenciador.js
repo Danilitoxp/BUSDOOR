@@ -306,7 +306,6 @@ elements.paymentForm.addEventListener("submit", async (e) => {
   }
 });
 
-  
 
   // Evento de exclusão de pagamento
   elements.paymentsContent.addEventListener("click", async (e) => {
@@ -341,18 +340,18 @@ elements.paymentForm.addEventListener("submit", async (e) => {
       }
     }
   });
+  
 
-  // Atualiza o conteúdo do modal de pagamentos
-  function updatePaymentsModal(fornecedor) {
-
-    elements.paymentsContent.innerHTML = `
+ // Atualiza o conteúdo do modal de pagamentos
+function updatePaymentsModal(fornecedor) {
+  elements.paymentsContent.innerHTML = `
     <h2>Histórico de Pagamentos para ${fornecedor.name}</h2>
     <ul>
       ${fornecedor.pagamentos && fornecedor.pagamentos.length
         ? fornecedor.pagamentos.map(pagamento => `
           <li>
             <span>Data:</span> ${formatDateToBR(pagamento.data)} <br>
-            <span>Valor:</span> R$ ${pagamento.valor} <br>
+            <span>Valor:</span> R$ ${formatCurrency(pagamento.valor)} <br>
             <span>NF:</span> N° ${pagamento.nf} <br>
             <button class="edit-payment" data-nf="${pagamento.nf}">
               <i class="bx bxs-edit"></i> Editar
@@ -368,7 +367,14 @@ elements.paymentForm.addEventListener("submit", async (e) => {
       <i class="bx bxs-plus-circle"></i> Adicionar Pagamento
     </button>
   `;
+}
+
+
+    // Função para formatar valores em moeda com separador de milhar
+  function formatCurrency(value) {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
+
 
   /////////////////////////////// FUNÇÕES UTILITARIAS ///////////////////////////
 
