@@ -350,9 +350,9 @@ function updatePaymentsModal(fornecedor) {
       ${fornecedor.pagamentos && fornecedor.pagamentos.length
         ? fornecedor.pagamentos.map(pagamento => `
           <li>
-            <span>Data:</span> ${formatDateToBR(pagamento.data)} <br>
-            <span>Valor:</span> ${formatCurrency(pagamento.valor)} <br>
-            <span>NF:</span> N° ${pagamento.nf} <br>
+            <span>Data: ${formatDateToBR(pagamento.data)}</span><br>
+            <span>Valor: ${formatCurrency(pagamento.valor)}</span><br>
+            <span>NF: ${pagamento.nf}</span><br>
             <button class="edit-payment" data-nf="${pagamento.nf}">
               <i class="bx bxs-edit"></i> Editar
             </button>
