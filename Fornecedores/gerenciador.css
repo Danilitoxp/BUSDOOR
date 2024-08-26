@@ -157,7 +157,7 @@ button {
 .fornecedores {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
   padding: 1rem;
 }
@@ -339,35 +339,41 @@ button {
   padding: 20px;
   border: 1px solid #888;
   width: 100%;
-  max-width: 600px;
+  max-width: 400px;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   margin: 5% auto;
 }
 
-
+label {
+  margin-top: 10px;
+}
 
 
 .modal-header {
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  border-bottom: 1px solid #ddd; 
-  padding-bottom: 10px; 
-  margin-bottom: 20px; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Distribui o espaço entre o título e o botão de fechar */
+  position: relative; /* Necessário para posicionar o botão de fechar */
+  padding: 10px; /* Adiciona algum padding para melhor aparência */
 }
 
-
 .modal-header h2 {
-  margin: 0; 
+  margin: 0; /* Remove a margem para centralizar melhor */
+  text-align: center; /* Garante que o texto esteja centralizado no h2 */
+  flex-grow: 1; /* Faz o h2 crescer e ocupar o espaço disponível */
 }
 
 .modal-header .close {
+  position: absolute; /* Remove o botão de fechar do fluxo normal */
+  right: -80px; /* Alinha o botão de fechar à direita do modal-header */
+  top: 5px; /* Ajusta a posição do botão de fechar */
   font-size: 1.5rem;
   color: #999;
   cursor: pointer;
   transition: color 0.3s;
 }
+
 
 .modal-header .close:hover {
   color: #333;
@@ -463,12 +469,15 @@ button {
   text-align: center;
   display: flex;
   gap: 20px;
+  flex-direction: column;
   padding: 0;
 }
 
 #payments-content ul li {
   display: flex;
   gap: 3px;
+  width: 100%;
+  height: 230px;
   flex-direction: column;
   background: #f9f9f9;
   border: 1px solid #ddd;
@@ -523,6 +532,10 @@ button {
   margin: 5px 0;
 }
 
+.edit-payment button {
+  display: flex;
+}
+
 
 #payments-content .edit-payment:hover {
   background-color: #e68900;
@@ -573,7 +586,7 @@ button {
 #payment-form-close {
   position: absolute;
   top: 10px;
-  right: 10px;
+  right: -60px;
   font-size: 20px;
   cursor: pointer;
 }
@@ -589,6 +602,11 @@ button {
   display: flex; 
   flex-direction: column; 
   font-size: 14px;
+  width: 100%;
+}
+
+#payment-form button {
+  width: 96%;
 }
 
 .close:hover,
@@ -599,6 +617,7 @@ button {
 }
 
 #form-fornecedor {
+  width: 80%;
   display: flex;
   flex-direction: column;
   gap: 1rem;

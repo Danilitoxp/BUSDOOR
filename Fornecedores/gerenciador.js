@@ -397,12 +397,6 @@ function updatePaymentsModal(fornecedor) {
     // Usa a Intl.NumberFormat para formatar o valor como moeda brasileira
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(numberValue);
   }
-  
-  // Testes
-  console.log(formatCurrency('193918'));  // R$ 1.939,18
-  console.log(formatCurrency('15950'));   // R$ 159,50
-  console.log(formatCurrency('350318'));  // R$ 3.503,18
-  
 
 
   // Evento de busca
