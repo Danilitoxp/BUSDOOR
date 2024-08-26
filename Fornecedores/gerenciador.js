@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
     closeModals();
   });
 
-  
+
 
   // Renderiza a lista de fornecedores
   function renderFornecedores(list) {
@@ -264,9 +264,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // Evento de submissão do formulário de pagamento
-elements.paymentForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  try {
+  elements.paymentForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
       const fornecedorId = currentFornecedorId; // Usa o ID do fornecedor armazenado
       const nf = elements.paymentForm.dataset.nf;
       const data = elements.paymentForm.data.value;
@@ -281,30 +281,30 @@ elements.paymentForm.addEventListener("submit", async (e) => {
       const pagamentoIndex = pagamentos.findIndex(p => p.nf === nf);
 
       if (pagamentoIndex > -1) {
-          // Editando um pagamento existente
-          pagamentos[pagamentoIndex] = { data, valor, nf: pagamentoNF };
-          await updateDoc(fornecedorRef, { pagamentos });
-          console.log(`Pagamento com NF ${pagamentoNF} atualizado com sucesso! ✔`);
-          // Exibe notificação de sucesso para edição
-          showNotification("Sucesso", `Pagamento com NF ${pagamentoNF} atualizado com sucesso!`);
+        // Editando um pagamento existente
+        pagamentos[pagamentoIndex] = { data, valor, nf: pagamentoNF };
+        await updateDoc(fornecedorRef, { pagamentos });
+        console.log(`Pagamento com NF ${pagamentoNF} atualizado com sucesso! ✔`);
+        // Exibe notificação de sucesso para edição
+        showNotification("Sucesso", `Pagamento com NF ${pagamentoNF} atualizado com sucesso!`);
       } else {
-          // Adicionando um novo pagamento
-          pagamentos.push({ data, valor, nf: pagamentoNF });
-          await updateDoc(fornecedorRef, { pagamentos });
-          console.log(`Pagamento com NF ${pagamentoNF} adicionado com sucesso! ✔`);
-          // Exibe notificação de sucesso para adição
-          showNotification("Sucesso", `Pagamento com NF ${pagamentoNF} adicionado com sucesso!`);
+        // Adicionando um novo pagamento
+        pagamentos.push({ data, valor, nf: pagamentoNF });
+        await updateDoc(fornecedorRef, { pagamentos });
+        console.log(`Pagamento com NF ${pagamentoNF} adicionado com sucesso! ✔`);
+        // Exibe notificação de sucesso para adição
+        showNotification("Sucesso", `Pagamento com NF ${pagamentoNF} adicionado com sucesso!`);
       }
 
       const fornecedores = await getFornecedores();
       renderFornecedores(fornecedores);
       closeModals();
-  } catch (error) {
+    } catch (error) {
       console.error("Erro ao processar pagamento: ", error);
       // Opcional: Exibir notificação de erro
       showNotification("Erro", "Ocorreu um erro ao processar o pagamento.");
-  }
-});
+    }
+  });
 
 
   // Evento de exclusão de pagamento
@@ -340,9 +340,9 @@ elements.paymentForm.addEventListener("submit", async (e) => {
       }
     }
   });
-  
 
- // Atualiza o conteúdo do modal de pagamentos
+
+  // Atualiza o conteúdo do modal de pagamentos
 function updatePaymentsModal(fornecedor) {
   elements.paymentsContent.innerHTML = `
     <h2>Histórico de Pagamentos para ${fornecedor.name}</h2>
@@ -351,7 +351,7 @@ function updatePaymentsModal(fornecedor) {
         ? fornecedor.pagamentos.map(pagamento => `
           <li>
             <span>Data:</span> ${formatDateToBR(pagamento.data)} <br>
-            <span>Valor:</span> R$ ${formatCurrency(pagamento.valor)} <br>
+            <span>Valor:</span> ${formatCurrency(pagamento.valor)} <br>
             <span>NF:</span> N° ${pagamento.nf} <br>
             <button class="edit-payment" data-nf="${pagamento.nf}">
               <i class="bx bxs-edit"></i> Editar
@@ -370,11 +370,6 @@ function updatePaymentsModal(fornecedor) {
 }
 
 
-    // Função para formatar valores em moeda com separador de milhar
-  function formatCurrency(value) {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  }
-
 
   /////////////////////////////// FUNÇÕES UTILITARIAS ///////////////////////////
 
@@ -387,6 +382,29 @@ function updatePaymentsModal(fornecedor) {
 
 
 
+  function formatCurrency(value) {
+    // Remove caracteres não numéricos, exceto ponto e vírgula
+    const cleanValue = value.replace(/\D/g, ''); // Remove tudo que não é dígito
+  
+    // Converte o valor para número
+    const numberValue = parseFloat(cleanValue) / 100; // Divide por 100 para tratar centavos
+  
+    // Verifica se a conversão foi bem-sucedida
+    if (isNaN(numberValue)) {
+      return 'R$ 0,00'; // Valor padrão caso a conversão falhe
+    }
+  
+    // Usa a Intl.NumberFormat para formatar o valor como moeda brasileira
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(numberValue);
+  }
+  
+  // Testes
+  console.log(formatCurrency('193918'));  // R$ 1.939,18
+  console.log(formatCurrency('15950'));   // R$ 159,50
+  console.log(formatCurrency('350318'));  // R$ 3.503,18
+  
+
+
   // Evento de busca
   elements.searchInput.addEventListener("input", async (e) => {
     const query = e.target.value.toLowerCase();
@@ -396,7 +414,7 @@ function updatePaymentsModal(fornecedor) {
     );
     renderFornecedores(filteredList);
   });
-
+  
 
   // Evento de fechamento dos modais
   function closeModals() {
@@ -440,9 +458,9 @@ function updatePaymentsModal(fornecedor) {
 
 
   ////////////////////////////////// NOTIFCAÇÕES //////////////////////////////////
-  
 
-  
+
+
   function showNotification(title, message) {
     const notification = document.getElementById('notification');
 
@@ -458,46 +476,46 @@ function updatePaymentsModal(fornecedor) {
 
     // Exibe a notificação
     notification.style.display = 'flex'; // Use 'flex' para alinhar itens horizontalmente
-    
+
     // Oculta a notificação após 3 segundos
     setTimeout(() => {
-        notification.style.display = 'none';
+      notification.style.display = 'none';
     }, 3000);
-}
+  }
 
-// Adiciona o listener para o botão de fechar
-document.addEventListener('click', (event) => {
+  // Adiciona o listener para o botão de fechar
+  document.addEventListener('click', (event) => {
     if (event.target.classList.contains('close-btn')) {
-        event.target.closest('.notifications-success').style.display = 'none';
+      event.target.closest('.notifications-success').style.display = 'none';
     }
-});
+  });
 
 
-async function addFornecedor(fornecedor) {
+  async function addFornecedor(fornecedor) {
     try {
-        const docRef = await addDoc(collection(db, "fornecedores"), fornecedor);
-        showNotification("Sucesso", "Fornecedor adicionado com sucesso!");
+      const docRef = await addDoc(collection(db, "fornecedores"), fornecedor);
+      showNotification("Sucesso", "Fornecedor adicionado com sucesso!");
     } catch (error) {
-        console.error("Erro ao adicionar fornecedor: ", error);
+      console.error("Erro ao adicionar fornecedor: ", error);
     }
-}
+  }
 
-async function updateFornecedor(id, fornecedor) {
+  async function updateFornecedor(id, fornecedor) {
     try {
-        const fornecedorRef = doc(db, "fornecedores", id);
-        const pagamentos = fornecedor.pagamentos || [];
-        await updateDoc(fornecedorRef, { ...fornecedor, pagamentos });
-        showNotification("Sucesso", `Fornecedor atualizado com ID: ${id}`);
+      const fornecedorRef = doc(db, "fornecedores", id);
+      const pagamentos = fornecedor.pagamentos || [];
+      await updateDoc(fornecedorRef, { ...fornecedor, pagamentos });
+      showNotification("Sucesso", `Fornecedor atualizado com ID: ${id}`);
     } catch (error) {
-        console.error("Erro ao atualizar fornecedor: ", error);
+      console.error("Erro ao atualizar fornecedor: ", error);
     }
-}
+  }
 
 
-// Função para Fechar Modal de Notificações
-document.querySelector('.close-btn').addEventListener('click', function() {
+  // Função para Fechar Modal de Notificações
+  document.querySelector('.close-btn').addEventListener('click', function () {
     document.querySelector('.notifications').style.display = 'none';
-});
+  });
 
 
   // Inicializa a lista de fornecedores
