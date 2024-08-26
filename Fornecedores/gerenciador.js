@@ -373,13 +373,13 @@ function updatePaymentsModal(fornecedor) {
 
   /////////////////////////////// FUNÇÕES UTILITARIAS ///////////////////////////
 
-  // Abre o modal de pagamentos
   function openPaymentsModal(fornecedor) {
+    console.log("Abrindo o modal de pagamentos para o fornecedor:", fornecedor); // Adicione este log
     updatePaymentsModal(fornecedor);
     elements.paymentsModal.style.display = "block";
     currentFornecedorId = fornecedor.id; // Armazena o ID do fornecedor
   }
-
+  
 
 
   function formatCurrency(value) {

@@ -25,6 +25,11 @@ main {
   align-items: center;
 }
 
+
+#add-payment {
+  margin: 0 30%;
+}
+
 .search {
   text-align: center;
   justify-content: center;
@@ -331,14 +336,15 @@ button {
   justify-content: center;
   align-items: center;
   background-color: #fefefe;
-  padding: 20px; 
+  padding: 20px;
   border: 1px solid #888;
-  width: 350px; 
+  width: 100%;
   max-width: 600px;
-  border-radius: 10px; 
-  box-shadow: 0px 4px 8px rgba(0,0,0,0.2); 
-  margin: 4% auto 0px; /* Opcional: Margem automática horizontal */
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 5% auto;
 }
+
 
 
 
@@ -375,7 +381,7 @@ button {
 
 /* Estilizando o modal de pagamentos */
 #payments-modal {
-  display: flex;
+  display: none;
   width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
@@ -445,10 +451,6 @@ button {
   width: 100%;
   max-width: 600px;
   position: relative;
-  display: flex;           /* Adicionado para usar Flexbox */
-  flex-direction: column;  /* Adicionado para alinhar itens em coluna */
-  align-items: center;     /* Centraliza horizontalmente */
-  justify-content: center; /* Centraliza verticalmente */
 }
 
 #payments-content h2 {
@@ -458,30 +460,37 @@ button {
 
 #payments-content ul {
   list-style: none;
+  text-align: center;
+  display: flex;
+  gap: 20px;
   padding: 0;
 }
 
 #payments-content ul li {
+  display: flex;
+  gap: 3px;
+  flex-direction: column;
   background: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 10px;
+  font-size: 13px;
   margin-bottom: 10px;
 }
 
+
 #payments-content ul li span {
   font-weight: bold;
-  color: #555;
+  color: #005a9c;
 }
 
-#payments-content button {
+#payments-content button  {
   background-color: #007fc8;
   color: white;
   border: none;
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 20px;
 }
 
 #payments-content button:hover {
@@ -511,8 +520,9 @@ button {
   border-radius: 3px;
   cursor: pointer;
   font-size: 14px;
-  margin-left: 10px;
+  margin: 5px 0;
 }
+
 
 #payments-content .edit-payment:hover {
   background-color: #e68900;
@@ -522,6 +532,7 @@ button {
   background: white;
   padding: 15px;
   border-radius: 8px;
+  width: 80%;
   max-width: 500px;
   position: relative;
 }
