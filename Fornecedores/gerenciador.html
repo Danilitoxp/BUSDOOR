@@ -11,9 +11,9 @@
 <body>
   <header>
     <div class="search">
-      <input id="search" type="text" placeholder="Buscar Fornecedor" />
+      <input id="search" type="text" placeholder="Buscar Fornecedor" aria-label="Buscar Fornecedor" />
       <button id="adicionarfornecedor" aria-label="Adicionar Fornecedor"><i class='bx bxs-plus-circle'></i></button>
-      <a href="/index.html"><button id="logout" aria-label="Filtrar Fornecedores"><i class='bx bx-exit'></i></button></a>
+      <a href="/index.html"><button id="logout" aria-label="Voltar para a Página Inicial"><i class='bx bx-exit'></i></button></a>
     </div>
   </header>
 
@@ -35,11 +35,11 @@
   </main>
 
   <!-- Modal de Pagamentos -->
-  <div id="payments-modal" class="modal">
+  <div id="payments-modal" class="modal" aria-labelledby="payments-modal-title" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-header">
         <h2 id="payments-modal-title">Histórico de Pagamentos</h2>
-        <span id="payments-close" class="close">&times;</span>
+        <span id="payments-close" class="close" aria-label="Fechar Modal">&times;</span>
       </div>
       <div id="payments-content" class="modal-body">
         <!-- Histórico de Pagamentos será inserido aqui -->
@@ -48,41 +48,32 @@
   </div>
 
   <!-- Formulário de Pagamento -->
-<div id="payment-form-modal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>Adicionar Pagamento</h2>
-      <span id="payment-form-close" class="close"><i class="bx bx-x"></i></span>
+  <div id="payment-form-modal" class="modal" aria-labelledby="payment-form-modal-title" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="payment-form-modal-title">Adicionar Pagamento</h2>
+        <span id="payment-form-close" class="close" aria-label="Fechar Modal"><i class="bx bx-x"></i></span>
+      </div>
+      <form id="payment-form">
+        <label for="data">Data:</label>
+        <input type="date" id="data" name="data" required>
+      
+        <label for="valor">Valor:</label>
+        <input type="number" placeholder="R$ 480" id="valor" name="valor" required>
+      
+        <label for="nf">NF:</label>
+        <input type="text" placeholder="N° 00175" id="nf" name="nf" required>
+      
+        <button type="submit"><i class="bx bx-save"></i> Salvar</button>
+      </form>
     </div>
-    <form id="payment-form">
-      <label for="data">
-        </i> Data:
-      </label>
-      <input type="date" id="data" name="data" required>
-    
-      <label for="valor">
-        </i> Valor:
-      </label>
-      <input type="number" placeholder="R$ 480"  id="valor" name="valor" required>
-    
-      <label for="nf">
-        </i> NF:
-      </label>
-      <input type="text" placeholder="N° 00175" id="nf" name="nf" required>
-    
-      <button type="submit">
-        <i class="bx bx-save"></i> Salvar
-      </button>
-    </form>
   </div>
-</div>
-
 
   <!-- Modal de Confirmação de Exclusão -->
-  <div id="confirm-delete-modal" class="modal">
+  <div id="confirm-delete-modal" class="modal" aria-labelledby="confirm-delete-modal-title" aria-hidden="true">
     <div class="modal-content confirm-delete-content">
-      <span class="close confirm-delete-close">&times;</span>
-      <h2>Confirmar Exclusão</h2>
+      <span class="close confirm-delete-close" aria-label="Fechar Modal">&times;</span>
+      <h2 id="confirm-delete-modal-title">Confirmar Exclusão</h2>
       <p>Você realmente deseja remover este pagamento?</p>
       <button id="confirm-delete">Confirmar</button>
       <button id="cancel-delete">Cancelar</button>
@@ -90,24 +81,27 @@
   </div>
 
   <!-- Modal de Fornecedor -->
-  <div id="modal" class="modal">
+  <div id="modal" class="modal" aria-labelledby="modal-title" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-header">
         <h2 id="modal-title">Adicionar Fornecedor</h2>
-        <span class="close">&times;</span>
+        <span class="close" aria-label="Fechar Modal">&times;</span>
       </div>
       <form id="form-fornecedor">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required />
 
         <label for="status">Situação:</label>
-        <select id="status" name="status">
-          <option value="true">Pagamento Confirmado</option>
-          <option value="false">Pagamento Pendente</option>
+        <select id="status" name="status" required>
+          <option value="" disabled selected>Selecione uma situação</option>
+          <option value="true">Ativo</option>
+          <option value="false">Inativo</option>
+          <option value="negociacao">Em Negociação</option>
         </select>
 
         <label for="pagamento">Forma de Pagamento:</label>
-        <select id="pagamento" name="pagamento">
+        <select id="pagamento" name="pagamento" required>
+          <option value="" disabled selected>Selecione a forma de pagamento</option>
           <option value="Mensal">Mensal</option>
           <option value="Bimestral">Bimestral</option>
           <option value="Trimestral">Trimestral</option>
@@ -122,6 +116,5 @@
   </div>
 
   <script type="module" src="/Fornecedores/gerenciador.js"></script>
-
 </body>
 </html>

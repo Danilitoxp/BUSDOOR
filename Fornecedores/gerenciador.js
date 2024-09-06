@@ -104,17 +104,17 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     const id = elements.formFornecedor.dataset.id;
     const name = elements.formFornecedor.nome.value;
-    const ativo = elements.formFornecedor.status.value === "true";
+    const status = elements.formFornecedor.status.value; // Pode ser "true", "false" ou "negociacao"
     const pagamento = elements.formFornecedor.pagamento.value;
-
+  
     // Verifica se o fornecedor já existe
     if (!id && await checkFornecedorDuplicado(name)) {
-      alert(`Já existe um fornecedor com esse o nome ${name}!`);
+      alert(`Já existe um fornecedor com esse nome ${name}!`);
       return;
     }
-
-    const fornecedor = { name, ativo, pagamento };
-
+  
+    const fornecedor = { name, status, pagamento }; // Incluindo status
+  
     if (id) {
       // Atualiza um fornecedor existente
       const fornecedorAtual = (await getFornecedores()).find(f => f.id === id);
@@ -125,11 +125,12 @@ document.addEventListener("DOMContentLoaded", () => {
       await addFornecedor(fornecedor);
       console.log(`Fornecedor ${name} Adicionado com sucesso! ✔`);
     }
-
+  
     const fornecedores = await getFornecedores();
     renderFornecedores(fornecedores);
     closeModals();
   });
+  
 
 
 
@@ -142,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const fornecedorElement = document.createElement("div");
       fornecedorElement.id = "fornecedor";
       fornecedorElement.dataset.id = fornecedor.id;
-
+  
       fornecedorElement.innerHTML = `
         <div class="descricao">
           <img src="/assets/images/buss animated.svg" alt="">
@@ -151,11 +152,13 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         </div>
         <div class="botoes">
-          <p id="ativo" class="${fornecedor.ativo ? "ativo" : "inativo"}">
-            ${fornecedor.ativo
-          ? "<i class='bx bxs-calendar-check'></i> Em Dia"
-          : "<i class='bx bx-error-alt'></i> Atrasado"
-        }
+          <p id="status" class="${fornecedor.status === "true" ? "ativo" : fornecedor.status === "false" ? "inativo" : "negociacao"}">
+            ${fornecedor.status === "true"
+              ? "<i class='bx bxs-calendar-check'></i> Em Dia"
+              : fornecedor.status === "false"
+              ? "<i class='bx bx-error-alt'></i> Atrasado"
+              : "<i class='bx bx-hourglass'></i> Em Negociação"
+            }
           </p>
           <label for="pagamento" class="upload-button">
             <i class='bx bx-briefcase-alt-2'></i> ${fornecedor.pagamento}
@@ -171,6 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
       elements.fornecedoresContainer.appendChild(fornecedorElement);
     });
   }
+  
 
   // Evento de Editar fornecedores
   elements.fornecedoresContainer.addEventListener("click", async (e) => {

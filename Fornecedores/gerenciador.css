@@ -178,6 +178,23 @@ button {
   position: relative;
 }
 
+.negociacao {
+  background-color: #ffff00; /* Amarelo */
+  border-radius: 0.6rem;
+  color: #000; /* Cor do texto para contraste */
+  padding: 0.5rem;
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.negociacao:hover {
+  background-color: #7e7e00; /* Amarelo mais suave ao passar o mouse */
+  color: #fff; /* Cor do texto ao passar o mouse */
+}
+
 #fornecedor:hover {
   transform: translateY(-5px);
 }
